@@ -3,15 +3,23 @@
 echo ">>> Making temporary directory..."
 mkdir -p /tmp/devos
 
-echo ">>> Copying local SSH key..."
-ssh-copy-id -f -o 'IdentityFile ~/.ssh/id_ed25519_bootstrap' -i ~/.ssh/id_ed25519_studio josh@devos.gilman.io
+echo ">>> Copying bootstrap SSH key..."
+gopass show ssh/bootstrap-priv >/tmp/devos/id_ed25519_bootstrap
+gopass show ssh/bootstrap-pub >/tmp/devos/id_ed25519_bootstrap.pub
 
-echo ">>> Copying devos SSH key..."
+echo ">>> Copying DevOS SSH key..."
 gopass show ssh/devos-priv >/tmp/devos/id_ed25519_devos
 gopass show ssh/devos-pub >/tmp/devos/id_ed25519_devos.pub
 
-scp -i ~/.ssh/id_ed25519_studio /tmp/devos/id_ed25519_devos josh@devos.gilman.io:.ssh/id_ed25519_devos
-scp -i ~/.ssh/id_ed25519_studio /tmp/devos/id_ed25519_devos.pub josh@devos.gilman.io:.ssh/id_ed25519_devos.pub
+echo ">>> Setting permissions..."
+chmod 0600 /tmp/devos/*
+
+scp -i /tmp/devos/id_ed25519_bootstrap /tmp/devos/id_ed25519_devos josh@devos.gilman.io:.ssh/id_ed25519_devos
+scp -i /tmp/devos/id_ed25519_bootstrap /tmp/devos/id_ed25519_devos.pub josh@devos.gilman.io:.ssh/id_ed25519_devos.pub
+
+echo ">>> Connecting to DevOS..."
+echo ">>> Please run setup.sh on the remote machine."
+ssh -i /tmp/devos/id_ed25519_bootstrap josh@devos.gilman.io
 
 echo ">>> Cleaning up..."
 rm -rf /tmp/devos
