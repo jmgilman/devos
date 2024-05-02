@@ -14,6 +14,9 @@ gopass show ssh/devos-pub >/tmp/devos/id_ed25519_devos.pub
 echo ">>> Setting permissions..."
 chmod 0600 /tmp/devos/*
 
+echo ">>> Purging existing known_hosts..."
+ssh-keygen -R devos.gilman.io
+
 scp -i /tmp/devos/id_ed25519_bootstrap /tmp/devos/id_ed25519_devos josh@devos.gilman.io:.ssh/id_ed25519_devos
 scp -i /tmp/devos/id_ed25519_bootstrap /tmp/devos/id_ed25519_devos.pub josh@devos.gilman.io:.ssh/id_ed25519_devos.pub
 
