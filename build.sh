@@ -4,6 +4,9 @@ set -ouex pipefail
 
 # RELEASE="$(rpm -E %fedora)"
 
+# Install pipx
+rpm-ostree install pipx
+
 # Enable our custom boot script
 systemctl enable first-boot.service
 
