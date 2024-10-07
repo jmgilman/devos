@@ -140,7 +140,7 @@ jobs:
           extra-args: |
             --disable-content-trust
 
-      - uses: sigstore/cosign-installer@v3.5.0
+      - uses: sigstore/cosign-installer@v3.7.0
         if: github.event_name != 'pull_request'
 
       - name: Sign container image
